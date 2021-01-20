@@ -13,7 +13,6 @@ on:
 env:
   GITHUB_RELEASE: true
   EXPORTER_PATH: godot_exporter
-  EXPORT_VERSION_NAME: debug
   # DEBUG_KEYSTORE_PATH: "https://github.com/vini-guerrero/godot_exporter/blob/master/keystores/debug.keystore?raw=true"
   # RELEASE_KEYSTORE_PATH: "https://github.com/vini-guerrero/godot_exporter/blob/master/keystores/mygame.keystore?raw=true"
 jobs:
@@ -24,12 +23,7 @@ jobs:
       matrix:
         GODOT_VERSIONS: [3.2.3]
         EXPORT_VERSION: [true, false]
-    steps:
-    - name: Set Version Name
-      run: |
-        [ "env.EXPORT_VERSION" == true ] && env.EXPORT_VERSION_NAME = "Release" || env.EXPORT_VERSION_NAME = "Debug"        
-        echo $env.EXPORT_VERSION_NAME
-
+    steps:    
     - uses: actions/checkout@v2
     
     - name: Setup ADB & Keystore
@@ -57,16 +51,32 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
-    - name: Upload iOS Summary
+    - name: Upload iOS Release Summary
       uses: actions/upload-artifact@v2
+      if: ${{ env.EXPORT_VERSION }} == true
       with:
-        name: iOS-${{ env.EXPORT_VERSION_NAME }}
+        name: iOS-Release
         path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/ios/iOS/
 
-    - name: Upload Android Summary
+    - name: Upload Android Release Summary
       uses: actions/upload-artifact@v2
+      if: ${{ env.EXPORT_VERSION }} == true
       with:
-        name: Android-${{ env.EXPORT_VERSION_NAME }}
+        name: Android-Release
+        path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/android/Android/
+    
+    - name: Upload iOS Debug Summary
+      uses: actions/upload-artifact@v2
+      if: ${{ env.EXPORT_VERSION }} == false
+      with:
+        name: iOS-Debug
+        path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/ios/iOS/
+
+    - name: Upload Android Debug Summary
+      uses: actions/upload-artifact@v2
+      if: ${{ env.EXPORT_VERSION }} == false
+      with:
+        name: Android-Debug
         path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/android/Android/
 
   
