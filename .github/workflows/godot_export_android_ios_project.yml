@@ -14,6 +14,7 @@ env:
   EXPORT_DEBUG: true
   EXPORT_RELEASE: true
   EXPORTER_PATH: godot_exporter
+  EXPORTER_ACTION_REPO: "vini-guerrero/godot-export@master"
   DEBUG_KEYSTORE_PATH: "https://github.com/vini-guerrero/godot_exporter/blob/master/keystores/debug.keystore?raw=true"
   RELEASE_KEYSTORE_PATH: "https://github.com/vini-guerrero/godot_exporter/blob/master/keystores/mygame.keystore?raw=true"
 jobs:
@@ -36,7 +37,7 @@ jobs:
         mv /usr/local/lib/android/sdk/platform-tools/adb /usr/bin
     
     - name: Setup Godot Environment and Project
-      uses: gustavottc/godot-export@master
+      uses: ${{ env.EXPORTER_ACTION_REPO }}
       with:
         godot_executable_download_url: https://downloads.tuxfamily.org/godotengine/${{matrix.GODOT_VERSIONS}}/Godot_v${{matrix.GODOT_VERSIONS}}-stable_linux_headless.64.zip
         godot_export_templates_download_url: https://downloads.tuxfamily.org/godotengine/${{matrix.GODOT_VERSIONS}}/Godot_v${{matrix.GODOT_VERSIONS}}-stable_export_templates.tpz
