@@ -23,6 +23,7 @@ jobs:
       matrix:
         GODOT_VERSIONS: [3.2.3]
         EXPORT_VERSION: [true, false]
+        EXPORT_VERSION_NAME: ["Release", "Debug"]
     steps:
     - uses: actions/checkout@v2
     
@@ -54,13 +55,13 @@ jobs:
     - name: Upload iOS Summary
       uses: actions/upload-artifact@v2
       with:
-        name: iOS
+        name: iOS-${{ matrix.EXPORT_VERSION_NAME }}
         path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/ios/iOS/
 
     - name: Upload Android Summary
       uses: actions/upload-artifact@v2
       with:
-        name: Android
+        name: Android-${{ matrix.EXPORT_VERSION_NAME }}
         path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/android/Android/
 
   
