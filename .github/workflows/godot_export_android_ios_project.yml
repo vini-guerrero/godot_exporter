@@ -97,12 +97,12 @@ jobs:
         prerelease: false  
 
     - name: Upload Release
-        id: upload_github_release
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_github_release.outputs.upload_url }}
-          asset_path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/android/Android/
-          asset_name: Android.zip
-          asset_content_type: application/zip
+      id: upload_github_release
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_github_release.outputs.upload_url }}
+        asset_path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/android/Android/
+        asset_name: Android.zip
+        asset_content_type: application/zip
