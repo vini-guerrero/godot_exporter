@@ -50,33 +50,19 @@ jobs:
         export_debug: ${{ matrix.EXPORT_VERSION }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    
-    - name: Upload iOS Release Summary
+
+    - name: Upload iOS Version Summary
       uses: actions/upload-artifact@v2
-      if: ${{ matrix.EXPORT_VERSION }} == true
+      if: matrix.EXPORT_VERSION == true
       with:
-        name: iOS-Release
+        name: iOS-Version
         path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/ios/iOS/
 
-    - name: Upload Android Release Summary
+    - name: Upload Android Version Summary
       uses: actions/upload-artifact@v2
-      if: ${{ matrix.EXPORT_VERSION }} == true
+      if: matrix.EXPORT_VERSION == true
       with:
-        name: Android-Release
-        path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/android/Android/
-    
-    - name: Upload iOS Debug Summary
-      uses: actions/upload-artifact@v2
-      if: ${{ matrix.EXPORT_VERSION }} == false
-      with:
-        name: iOS-Debug
-        path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/ios/iOS/
-
-    - name: Upload Android Debug Summary
-      uses: actions/upload-artifact@v2
-      if: ${{ matrix.EXPORT_VERSION }} == false
-      with:
-        name: Android-Debug
+        name: Android-Version
         path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/android/Android/
 
   
