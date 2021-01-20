@@ -53,28 +53,28 @@ jobs:
     
     - name: Upload iOS Release Summary
       uses: actions/upload-artifact@v2
-      if: ${{ env.EXPORT_VERSION }} == true
+      if: ${{ matrix.EXPORT_VERSION }} == true
       with:
         name: iOS-Release
         path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/ios/iOS/
 
     - name: Upload Android Release Summary
       uses: actions/upload-artifact@v2
-      if: ${{ env.EXPORT_VERSION }} == true
+      if: ${{ matrix.EXPORT_VERSION }} == true
       with:
         name: Android-Release
         path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/android/Android/
     
     - name: Upload iOS Debug Summary
       uses: actions/upload-artifact@v2
-      if: ${{ env.EXPORT_VERSION }} == false
+      if: ${{ matrix.EXPORT_VERSION }} == false
       with:
         name: iOS-Debug
         path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/ios/iOS/
 
     - name: Upload Android Debug Summary
       uses: actions/upload-artifact@v2
-      if: ${{ env.EXPORT_VERSION }} == false
+      if: ${{ matrix.EXPORT_VERSION }} == false
       with:
         name: Android-Debug
         path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/android/Android/
