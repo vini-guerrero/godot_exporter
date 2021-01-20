@@ -1,0 +1,46 @@
+name: Export for Android and iOS
+on:
+  workflow_run:
+    workflows: [ "Build Android" ]
+    types: 
+      - completed
+  push:
+    paths: 
+      - '.github/workflows/export_android_ios_project.yml'
+      - 'example/**'
+    branches: [ master ]
+jobs:
+  export:
+    name: Export and Upload Artifact
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        GODOT_VERSIONS: [3.2.3]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Export AdMob example to Android and iOS
+      # Use latest version (see releases for all versions)
+      uses: gustavottc/godot-export@master
+      with:
+        # Defining all the required inputs
+        godot_executable_download_url: https://downloads.tuxfamily.org/godotengine/${{matrix.GODOT_VERSIONS}}/Godot_v${{matrix.GODOT_VERSIONS}}-stable_linux_headless.64.zip
+        godot_export_templates_download_url: https://downloads.tuxfamily.org/godotengine/${{matrix.GODOT_VERSIONS}}/Godot_v${{matrix.GODOT_VERSIONS}}-stable_export_templates.tpz
+        relative_project_path: ./example/
+        use_preset_export_path: true
+        create_release: true
+        export_debug: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Upload iOS artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: AdMobiOS
+        path: /home/runner/work/Godot-AdMob-Android-iOS/builds/ios/iOS/
+
+    - name: Upload Android artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: AdMobAndroid
+        path: /home/runner/work/Godot-AdMob-Android-iOS/builds/android/Android/
+
+  
