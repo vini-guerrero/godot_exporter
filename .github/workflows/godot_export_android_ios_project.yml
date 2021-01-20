@@ -27,7 +27,7 @@ jobs:
     steps:
     - name: Set Version Name
       run: |
-        [ "$env.EXPORT_VERSION" == true ] && $env.EXPORT_VERSION_NAME = "Release" || $env.EXPORT_VERSION_NAME = "Debug"        
+        [ "env.EXPORT_VERSION" == true ] && EXPORT_VERSION_NAME = "Release" || EXPORT_VERSION_NAME = "Debug"        
         echo $env.EXPORT_VERSION_NAME
 
     - uses: actions/checkout@v2
