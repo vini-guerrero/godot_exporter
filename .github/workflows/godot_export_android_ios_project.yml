@@ -6,8 +6,13 @@ on:
     types: 
       - completed
   push:
+    # paths: 
+    #   - '.github/workflows/godot_export_android_ios_project.yml'
+    #   - './../*'
     branches: [ master ]
 env:
+  DEBUG_KEYSTORE_PATH:
+  RELEASE_KEYSTORE_PATH:
   EXPORTER_PATH: godot_exporter
 jobs:
   export:
