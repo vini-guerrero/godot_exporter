@@ -10,6 +10,8 @@ on:
     #   - '.github/workflows/godot_export_android_ios_project.yml'
     #   - './../*'
     branches: [ master ]
+    tags:
+      - 'v*' 
 env:
   GITHUB_RELEASE: true
   EXPORTER_PATH: godot_exporter
@@ -26,57 +28,72 @@ jobs:
     steps:    
     - uses: actions/checkout@v2
     
-    - name: Setup ADB & Keystore
-      # run: |
-      #   wget -O debug.keystore ${{ env.DEBUG_KEYSTORE_PATH }}
-      #   wget -O release.keystore ${{ env.RELEASE_KEYSTORE_PATH }}
-      #   sudo chmod 777 -R /usr/bin
-      #   mv debug.keystore /usr/bin
-      #   mv release.keystore /usr/bin
-      #   mv /usr/local/lib/android/sdk/platform-tools/adb /usr/bin
+    - name: Create Github Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: |
+            Changes in this Release
+            - First Change
+            - Second Change
+          draft: false
+          prerelease: false
+
+    # - name: Setup ADB & Keystore
+    #   # run: |
+    #   #   wget -O debug.keystore ${{ env.DEBUG_KEYSTORE_PATH }}
+    #   #   wget -O release.keystore ${{ env.RELEASE_KEYSTORE_PATH }}
+    #   #   sudo chmod 777 -R /usr/bin
+    #   #   mv debug.keystore /usr/bin
+    #   #   mv release.keystore /usr/bin
+    #   #   mv /usr/local/lib/android/sdk/platform-tools/adb /usr/bin
       
-      run: |        
-        sudo chmod 777 -R /usr/bin        
-        mv /usr/local/lib/android/sdk/platform-tools/adb /usr/bin      
+    #   run: |        
+    #     sudo chmod 777 -R /usr/bin        
+    #     mv /usr/local/lib/android/sdk/platform-tools/adb /usr/bin      
     
-    - name: Setup Godot Environment and Project
-      uses: vini-guerrero/godot-export@master
-      with:
-        godot_executable_download_url: https://downloads.tuxfamily.org/godotengine/${{matrix.GODOT_VERSIONS}}/Godot_v${{matrix.GODOT_VERSIONS}}-stable_linux_headless.64.zip
-        godot_export_templates_download_url: https://downloads.tuxfamily.org/godotengine/${{matrix.GODOT_VERSIONS}}/Godot_v${{matrix.GODOT_VERSIONS}}-stable_export_templates.tpz
-        relative_project_path: ./
-        use_preset_export_path: true
-        create_release: ${{ env.GITHUB_RELEASE }}
-        export_debug: ${{ matrix.EXPORT_VERSION }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    # - name: Setup Godot Environment and Project
+    #   uses: vini-guerrero/godot-export@master
+    #   with:
+    #     godot_executable_download_url: https://downloads.tuxfamily.org/godotengine/${{matrix.GODOT_VERSIONS}}/Godot_v${{matrix.GODOT_VERSIONS}}-stable_linux_headless.64.zip
+    #     godot_export_templates_download_url: https://downloads.tuxfamily.org/godotengine/${{matrix.GODOT_VERSIONS}}/Godot_v${{matrix.GODOT_VERSIONS}}-stable_export_templates.tpz
+    #     relative_project_path: ./
+    #     use_preset_export_path: true
+    #     create_release: ${{ env.GITHUB_RELEASE }}
+    #     export_debug: ${{ matrix.EXPORT_VERSION }}
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: iOS Release Build
-      uses: actions/upload-artifact@v2
-      if: matrix.EXPORT_VERSION == true
-      with:
-        name: iOS-Release
-        path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/ios/iOS/
+    # - name: iOS Release Build
+    #   uses: actions/upload-artifact@v2
+    #   if: matrix.EXPORT_VERSION == true
+    #   with:
+    #     name: iOS-Release
+    #     path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/ios/iOS/
 
-    - name: Android Release Build
-      uses: actions/upload-artifact@v2
-      if: matrix.EXPORT_VERSION == true
-      with:
-        name: Android-Release
-        path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/android/Android/
+    # - name: Android Release Build
+    #   uses: actions/upload-artifact@v2
+    #   if: matrix.EXPORT_VERSION == true
+    #   with:
+    #     name: Android-Release
+    #     path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/android/Android/
     
-    - name: iOS Debug Build
-      uses: actions/upload-artifact@v2
-      if: matrix.EXPORT_VERSION == false
-      with:
-        name: iOS-Debug
-        path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/ios/iOS/
+    # - name: iOS Debug Build
+    #   uses: actions/upload-artifact@v2
+    #   if: matrix.EXPORT_VERSION == false
+    #   with:
+    #     name: iOS-Debug
+    #     path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/ios/iOS/
 
-    - name: Android Debug Build
-      uses: actions/upload-artifact@v2
-      if: matrix.EXPORT_VERSION == false
-      with:
-        name: Android-Debug
-        path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/android/Android/
+    # - name: Android Debug Build
+    #   uses: actions/upload-artifact@v2
+    #   if: matrix.EXPORT_VERSION == false
+    #   with:
+    #     name: Android-Debug
+    #     path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/android/Android/
 
   
