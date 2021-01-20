@@ -42,9 +42,9 @@ jobs:
       
     - name: Set Version Name
       run: |
-        if [[ "${{ env.EXPORT_VERSION }}" == true ]]; then
+        if [[ ${{ env.EXPORT_VERSION }} == true ]]; then
             env.EXPORT_VERSION_NAME = "Release"
-        elif [[ "${{ env.EXPORT_VERSION }}" == false ]]; then
+        elif [[ ${{ env.EXPORT_VERSION }} == false ]]; then
             env.EXPORT_VERSION_NAME = "Debug"
         fi        
     
