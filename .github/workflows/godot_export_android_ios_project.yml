@@ -80,7 +80,6 @@ jobs:
       with:
         name: Android-Debug
         path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/android/Android/
-    
 
     - name: Create Github Release
       id: create_github_release
