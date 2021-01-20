@@ -11,9 +11,11 @@ on:
     #   - './../*'
     branches: [ master ]
 env:
+  EXPORT_DEBUG: true
+  EXPORT_RELEASE: true
+  EXPORTER_PATH: godot_exporter
   DEBUG_KEYSTORE_PATH: "https://github.com/vini-guerrero/godot_exporter/blob/master/keystores/debug.keystore?raw=true"
   RELEASE_KEYSTORE_PATH: "https://github.com/vini-guerrero/godot_exporter/blob/master/keystores/mygame.keystore?raw=true"
-  EXPORTER_PATH: godot_exporter
 jobs:
   export:
     name: Export and Upload Artifact
@@ -27,8 +29,10 @@ jobs:
     - name: Setup ADB & Keystore
       run: |
         wget -O debug.keystore ${{ env.DEBUG_KEYSTORE_PATH }}
+        wget -O release.keystore ${{ env.RELEASE_KEYSTORE_PATH }}
         sudo chmod 777 -R /usr/bin
         mv debug.keystore /usr/bin
+        mv release.keystore /usr/bin
         mv /usr/local/lib/android/sdk/platform-tools/adb /usr/bin
     
     - name: Setup Godot Environment and Project
@@ -38,8 +42,8 @@ jobs:
         godot_export_templates_download_url: https://downloads.tuxfamily.org/godotengine/${{matrix.GODOT_VERSIONS}}/Godot_v${{matrix.GODOT_VERSIONS}}-stable_export_templates.tpz
         relative_project_path: ./
         use_preset_export_path: true
-        create_release: false
-        export_debug: true
+        create_release: ${{ env.EXPORT_RELEASE }}
+        export_debug: ${{ env.EXPORT_DEBUG }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
