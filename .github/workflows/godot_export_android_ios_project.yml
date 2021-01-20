@@ -13,6 +13,7 @@ on:
 env:
   GITHUB_RELEASE: true
   EXPORTER_PATH: godot_exporter
+  EXPORT_VERSION_NAME: debug
   # DEBUG_KEYSTORE_PATH: "https://github.com/vini-guerrero/godot_exporter/blob/master/keystores/debug.keystore?raw=true"
   # RELEASE_KEYSTORE_PATH: "https://github.com/vini-guerrero/godot_exporter/blob/master/keystores/mygame.keystore?raw=true"
 jobs:
@@ -23,7 +24,6 @@ jobs:
       matrix:
         GODOT_VERSIONS: [3.2.3]
         EXPORT_VERSION: [true, false]
-        EXPORT_VERSION_NAME: ["Release", "Debug"]
     steps:
     - uses: actions/checkout@v2
     
@@ -39,6 +39,14 @@ jobs:
       run: |        
         sudo chmod 777 -R /usr/bin        
         mv /usr/local/lib/android/sdk/platform-tools/adb /usr/bin
+      
+    - name: Set Version Name
+      run: |
+        if [[ "${{ env.EXPORT_VERSION }}" == true ]]; then
+            echo "Release" >> "$env.EXPORT_VERSION_NAME"
+        elif [[ "${{ env.EXPORT_VERSION }}" == false ]]; then
+            echo "Debug" >> "$env.EXPORT_VERSION_NAME"
+        fi
     
     - name: Setup Godot Environment and Project
       uses: vini-guerrero/godot-export@master
@@ -55,13 +63,13 @@ jobs:
     - name: Upload iOS Summary
       uses: actions/upload-artifact@v2
       with:
-        name: iOS-${{ matrix.EXPORT_VERSION_NAME }}
+        name: iOS-${{ env.EXPORT_VERSION_NAME }}
         path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/ios/iOS/
 
     - name: Upload Android Summary
       uses: actions/upload-artifact@v2
       with:
-        name: Android-${{ matrix.EXPORT_VERSION_NAME }}
+        name: Android-${{ env.EXPORT_VERSION_NAME }}
         path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/android/Android/
 
   
