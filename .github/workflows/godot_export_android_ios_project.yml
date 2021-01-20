@@ -42,7 +42,6 @@ jobs:
         mv /usr/local/lib/android/sdk/platform-tools/adb /usr/bin
 
     - name: Create Github Release
-        id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
@@ -55,7 +54,7 @@ jobs:
             - Second Change
           draft: false
           prerelease: false     
-          
+
     # - name: Setup Godot Environment and Project
     #   uses: vini-guerrero/godot-export@master
     #   with:
