@@ -80,7 +80,7 @@ jobs:
       with:
         name: Android-Debug
         path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/android/Android/
-
+    
     - name: Create Github Release
       id: create_github_release
       uses: actions/create-release@v1
@@ -102,6 +102,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_github_release.outputs.upload_url }}
-        asset_path: ./home/runner/work/${{ env.EXPORTER_PATH }}/builds/android/Android/
+        asset_path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/android/Android/Android-Debug
         asset_name: Android.zip
         asset_content_type: application/zip
