@@ -25,6 +25,11 @@ jobs:
         GODOT_VERSIONS: [3.2.3]
         EXPORT_VERSION: [true, false]
     steps:
+    - name: Set Version Name
+      run: |
+        [ "$env.EXPORT_VERSION" == true ] && $env.EXPORT_VERSION_NAME = "Release" || $env.EXPORT_VERSION_NAME = "Debug"        
+        echo $env.EXPORT_VERSION_NAME
+
     - uses: actions/checkout@v2
     
     - name: Setup ADB & Keystore
@@ -38,15 +43,7 @@ jobs:
       
       run: |        
         sudo chmod 777 -R /usr/bin        
-        mv /usr/local/lib/android/sdk/platform-tools/adb /usr/bin
-      
-    - name: Set Version Name
-      run: |
-        if [[ $env.EXPORT_VERSION == true ]]; then
-            $env.EXPORT_VERSION_NAME = "Release"
-        elif [[ $env.EXPORT_VERSION == false ]]; then
-            $env.EXPORT_VERSION_NAME = "Debug"
-        fi        
+        mv /usr/local/lib/android/sdk/platform-tools/adb /usr/bin      
     
     - name: Setup Godot Environment and Project
       uses: vini-guerrero/godot-export@master
