@@ -43,10 +43,10 @@ jobs:
     - name: Set Version Name
       run: |
         if [[ "${{ env.EXPORT_VERSION }}" == true ]]; then
-            echo "Release" >> "$env.EXPORT_VERSION_NAME"
+            env.EXPORT_VERSION_NAME = "Release"
         elif [[ "${{ env.EXPORT_VERSION }}" == false ]]; then
-            echo "Debug" >> "$env.EXPORT_VERSION_NAME"
-        fi
+            env.EXPORT_VERSION_NAME = "Debug"
+        fi        
     
     - name: Setup Godot Environment and Project
       uses: vini-guerrero/godot-export@master
