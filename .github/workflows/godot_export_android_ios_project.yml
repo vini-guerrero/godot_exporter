@@ -40,12 +40,12 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: iOS
-        path: /home/runner/work/${{github.workspace}}/builds/ios/iOS/
+        path: ${{github.workspace}}/builds/ios/iOS/
 
     - name: Upload Android artifact
       uses: actions/upload-artifact@v2
       with:
         name: Android
-        path: /home/runner/work/${{github.workspace}}/builds/android/Android/
+        path: ${{github.workspace}}/builds/android/Android/
 
   
