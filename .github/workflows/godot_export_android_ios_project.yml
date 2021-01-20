@@ -11,8 +11,8 @@ on:
     #   - './../*'
     branches: [ master ]
 env:
-  DEBUG_KEYSTORE_PATH:
-  RELEASE_KEYSTORE_PATH:
+  DEBUG_KEYSTORE_PATH: "https://github.com/vini-guerrero/godot_exporter/blob/master/keystores/debug.keystore?raw=true"
+  RELEASE_KEYSTORE_PATH: "https://github.com/vini-guerrero/godot_exporter/blob/master/keystores/mygame.keystore?raw=true"
   EXPORTER_PATH: godot_exporter
 jobs:
   export:
@@ -26,7 +26,7 @@ jobs:
     
     - name: Setup ADB & Keystore
       run: |
-        keytool -keyalg RSA -genkeypair -alias androiddebugkey -keypass android -keystore debug.keystore -storepass android -dname "CN=Android Debug,O=Android,C=US" -validity 9999 -deststoretype pkcs12
+        wget ${{ env.DEBUG_KEYSTORE_PATH }}
         sudo chmod 777 -R /usr/bin
         mv debug.keystore /usr/bin
         mv /usr/local/lib/android/sdk/platform-tools/adb /usr/bin
@@ -47,12 +47,12 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: iOS
-        path: /home/runner/work/${{env.EXPORTER_PATH}}/builds/ios/iOS/
+        path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/ios/iOS/
 
     - name: Upload Android Summary
       uses: actions/upload-artifact@v2
       with:
         name: Android
-        path: /home/runner/work/${{env.EXPORTER_PATH}}/builds/android/Android/
+        path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/android/Android/
 
   
