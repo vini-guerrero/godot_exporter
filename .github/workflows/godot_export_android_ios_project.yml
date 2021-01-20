@@ -1,4 +1,4 @@
-name: Export for Android and iOS
+name: Export Android and iOS
 on:
   workflow_dispatch:
   workflow_run:
@@ -21,13 +21,15 @@ jobs:
         GODOT_VERSIONS: [3.2.3]
     steps:
     - uses: actions/checkout@v2
-    - name: Set Up ADB & Keystore
+    
+    - name: Setup ADB & Keystore
       run: |
         keytool -keyalg RSA -genkeypair -alias androiddebugkey -keypass android -keystore debug.keystore -storepass android -dname "CN=Android Debug,O=Android,C=US" -validity 9999 -deststoretype pkcs12
         sudo chmod 777 -R /usr/bin
         mv debug.keystore /usr/bin
         mv /usr/local/lib/android/sdk/platform-tools/adb /usr/bin
-    - name: Export AdMob example to Android and iOS
+    
+    - name: Setup Godot Environment and Project
       uses: gustavottc/godot-export@master
       with:
         godot_executable_download_url: https://downloads.tuxfamily.org/godotengine/${{matrix.GODOT_VERSIONS}}/Godot_v${{matrix.GODOT_VERSIONS}}-stable_linux_headless.64.zip
@@ -38,13 +40,14 @@ jobs:
         export_debug: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Upload iOS artifact
+    
+    - name: Upload iOS Summary
       uses: actions/upload-artifact@v2
       with:
         name: iOS
         path: /home/runner/work/${{env.EXPORTER_PATH}}/builds/ios/iOS/
 
-    - name: Upload Android artifact
+    - name: Upload Android Summary
       uses: actions/upload-artifact@v2
       with:
         name: Android
