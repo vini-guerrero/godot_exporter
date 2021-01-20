@@ -28,6 +28,19 @@ jobs:
     steps:    
     - uses: actions/checkout@v2
     
+    - name: Setup ADB & Keystore
+      # run: |
+      #   wget -O debug.keystore ${{ env.DEBUG_KEYSTORE_PATH }}
+      #   wget -O release.keystore ${{ env.RELEASE_KEYSTORE_PATH }}
+      #   sudo chmod 777 -R /usr/bin
+      #   mv debug.keystore /usr/bin
+      #   mv release.keystore /usr/bin
+      #   mv /usr/local/lib/android/sdk/platform-tools/adb /usr/bin
+      
+      run: |        
+        sudo chmod 777 -R /usr/bin        
+        mv /usr/local/lib/android/sdk/platform-tools/adb /usr/bin
+
     - name: Create Github Release
         id: create_release
         uses: actions/create-release@v1
@@ -41,21 +54,8 @@ jobs:
             - First Change
             - Second Change
           draft: false
-          prerelease: false
-
-    # - name: Setup ADB & Keystore
-    #   # run: |
-    #   #   wget -O debug.keystore ${{ env.DEBUG_KEYSTORE_PATH }}
-    #   #   wget -O release.keystore ${{ env.RELEASE_KEYSTORE_PATH }}
-    #   #   sudo chmod 777 -R /usr/bin
-    #   #   mv debug.keystore /usr/bin
-    #   #   mv release.keystore /usr/bin
-    #   #   mv /usr/local/lib/android/sdk/platform-tools/adb /usr/bin
-      
-    #   run: |        
-    #     sudo chmod 777 -R /usr/bin        
-    #     mv /usr/local/lib/android/sdk/platform-tools/adb /usr/bin      
-    
+          prerelease: false     
+          
     # - name: Setup Godot Environment and Project
     #   uses: vini-guerrero/godot-export@master
     #   with:
@@ -95,5 +95,3 @@ jobs:
     #   with:
     #     name: Android-Debug
     #     path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/android/Android/
-
-  
