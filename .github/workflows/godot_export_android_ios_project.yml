@@ -26,7 +26,7 @@ jobs:
     
     - name: Setup ADB & Keystore
       run: |
-        wget ${{ env.DEBUG_KEYSTORE_PATH }}
+        wget -O debug.keystore ${{ env.DEBUG_KEYSTORE_PATH }}
         sudo chmod 777 -R /usr/bin
         mv debug.keystore /usr/bin
         mv /usr/local/lib/android/sdk/platform-tools/adb /usr/bin
