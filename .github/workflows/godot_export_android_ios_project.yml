@@ -11,7 +11,7 @@ on:
     #   - './../*'
     branches: [ master ]
 env:
-  EXPORT_DEBUG: true
+  EXPORT_DEBUG: false
   EXPORT_RELEASE: true
   EXPORTER_PATH: godot_exporter
   DEBUG_KEYSTORE_PATH: "https://github.com/vini-guerrero/godot_exporter/blob/master/keystores/debug.keystore?raw=true"
