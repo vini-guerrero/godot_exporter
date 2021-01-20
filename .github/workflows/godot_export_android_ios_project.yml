@@ -27,12 +27,16 @@ jobs:
     - uses: actions/checkout@v2
     
     - name: Setup ADB & Keystore
-      run: |
-        wget -O debug.keystore ${{ env.DEBUG_KEYSTORE_PATH }}
-        wget -O release.keystore ${{ env.RELEASE_KEYSTORE_PATH }}
-        sudo chmod 777 -R /usr/bin
-        mv debug.keystore /usr/bin
-        mv release.keystore /usr/bin
+      # run: |
+      #   wget -O debug.keystore ${{ env.DEBUG_KEYSTORE_PATH }}
+      #   wget -O release.keystore ${{ env.RELEASE_KEYSTORE_PATH }}
+      #   sudo chmod 777 -R /usr/bin
+      #   mv debug.keystore /usr/bin
+      #   mv release.keystore /usr/bin
+      #   mv /usr/local/lib/android/sdk/platform-tools/adb /usr/bin
+      
+      run: |        
+        sudo chmod 777 -R /usr/bin        
         mv /usr/local/lib/android/sdk/platform-tools/adb /usr/bin
     
     - name: Setup Godot Environment and Project
