@@ -14,7 +14,7 @@ env:
   EXPORT_DEBUG: true
   EXPORT_RELEASE: true
   EXPORTER_PATH: godot_exporter
-  EXPORTER_ACTION_REPO: "vini-guerrero/godot-export@master"
+  EXPORTER_ACTION_REPO: vini-guerrero/godot-export@master
   DEBUG_KEYSTORE_PATH: "https://github.com/vini-guerrero/godot_exporter/blob/master/keystores/debug.keystore?raw=true"
   RELEASE_KEYSTORE_PATH: "https://github.com/vini-guerrero/godot_exporter/blob/master/keystores/mygame.keystore?raw=true"
 jobs:
