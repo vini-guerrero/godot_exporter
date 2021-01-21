@@ -92,8 +92,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
       with:
-        tag_name: ${{ steps.tag_version.outputs.TAG_VERSION}}
-        release_name: Release ${{ steps.tag_version.outputs.TAG_VERSION}}
+        tag_name: ${{ steps.tag_version.outputs.TAG_VERSION }}
+        release_name: Release ${{ steps.tag_version.outputs.TAG_VERSION }}
         body: |
           Godot Export Android & iOS Project
           - Automated Build
@@ -103,10 +103,11 @@ jobs:
     - name: Upload Release
       id: upload_github_release
       uses: actions/upload-release-asset@v1
+      if: matrix.EXPORT_VERSION == false
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_github_release.outputs.upload_url }}
         asset_path: ./home/runner/work/${{ env.EXPORTER_PATH }}/builds/android/Android/
-        asset_name: Android.zip
+        asset_name: Android-Debug.zip
         asset_content_type: application/zip
