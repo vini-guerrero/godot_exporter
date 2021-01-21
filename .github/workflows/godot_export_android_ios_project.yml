@@ -19,7 +19,7 @@ env:
   # RELEASE_KEYSTORE_PATH: "https://github.com/vini-guerrero/godot_exporter/blob/master/keystores/mygame.keystore?raw=true"
 jobs:
   export:
-    name: Export and Upload Artifact
+    name: Export and Upload Game
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -37,7 +37,7 @@ jobs:
       #   mv release.keystore /usr/bin
       #   mv /usr/local/lib/android/sdk/platform-tools/adb /usr/bin
       
-      run: |        
+      run: |
         sudo chmod 777 -R /usr/bin        
         mv /usr/local/lib/android/sdk/platform-tools/adb /usr/bin
     
@@ -108,6 +108,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_github_release.outputs.upload_url }}
-        asset_path: ./home/runner/work/${{ env.EXPORTER_PATH }}/builds/android/Android/
+        asset_path: ./home/runner/work/${{ env.EXPORTER_PATH }}/builds/android/Android/Android-Debug
         asset_name: Android-Debug.zip
         asset_content_type: application/zip
