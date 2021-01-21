@@ -106,8 +106,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
       with:
-        tag_name: ${{ steps.tag_version.outputs.TAG_VERSION }}
-        release_name: ${{ steps.tag_version.outputs.TAG_VERSION }} - ${{ matrix.EXPORT_VERSION }}
+        tag_name: $(date)
+        release_name: $(date)
         body: |
           Godot Export Android & iOS Project
           - Automated Build
