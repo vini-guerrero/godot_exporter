@@ -60,14 +60,14 @@ jobs:
 
     - name: iOS Release Build
       uses: actions/upload-artifact@v2
-      if: matrix.EXPORT_VERSION == "Release"
+      if: matrix.EXPORT_VERSION == 'Release'
       with:
         name: iOS-Release
         path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/ios/iOS/
 
     - name: Android Release Build
       uses: actions/upload-artifact@v2
-      if: matrix.EXPORT_VERSION == "Release"
+      if: matrix.EXPORT_VERSION == 'Release'
       with:
         name: Android-Release
         path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/android/Android/
@@ -91,14 +91,14 @@ jobs:
     
     # - name: iOS Debug Build
     #   uses: actions/upload-artifact@v2
-    #   if: matrix.EXPORT_VERSION == false
+    #   if: matrix.EXPORT_VERSION == 'Debug'
     #   with:
     #     name: iOS-Debug
     #     path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/ios/iOS/
 
     # - name: Android Debug Build
     #   uses: actions/upload-artifact@v2
-    #   if: matrix.EXPORT_VERSION == false
+    #   if: matrix.EXPORT_VERSION == 'Debug'
     #   with:
     #     name: Android-Debug
     #     path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/android/Android/
@@ -106,7 +106,7 @@ jobs:
     # - name: Create Github Release
     #   id: create_github_release
     #   uses: actions/create-release@v1
-    #   if: matrix.EXPORT_VERSION == "Debug"
+    #   if: matrix.EXPORT_VERSION == 'Debug'
     #   env:
     #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
     #   with:
@@ -121,7 +121,7 @@ jobs:
     # - name: Upload Release
     #   id: upload_github_release
     #   uses: actions/upload-release-asset@v1
-    #   if: matrix.EXPORT_VERSION == "Debug"
+    #   if: matrix.EXPORT_VERSION == 'Debug'
     #   env:
     #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     #   with:
