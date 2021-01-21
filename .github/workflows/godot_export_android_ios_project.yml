@@ -24,7 +24,7 @@ jobs:
     strategy:
       matrix:
         GODOT_VERSIONS: [3.2.3]
-        EXPORT_VERSION: [true, false]
+        EXPORT_VERSION: ["Release", "Debug"]
     steps:    
     - uses: actions/checkout@v2
     
@@ -60,14 +60,14 @@ jobs:
 
     - name: iOS Release Build
       uses: actions/upload-artifact@v2
-      if: matrix.EXPORT_VERSION == true
+      if: matrix.EXPORT_VERSION == "Release"
       with:
         name: iOS-Release
         path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/ios/iOS/
 
     - name: Android Release Build
       uses: actions/upload-artifact@v2
-      if: matrix.EXPORT_VERSION == true
+      if: matrix.EXPORT_VERSION == "Release"
       with:
         name: Android-Release
         path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/android/Android/
@@ -75,13 +75,17 @@ jobs:
     - name: Get Releases
       id: get_releases
       run: |
+        mkdir -p /home/runner/work/${{ env.EXPORTER_PATH }}/builds/export/
+
         cd /home/runner/work/${{ env.EXPORTER_PATH }}/builds/ios/iOS/ 
-        tar -zcvf ios.zip *
-        mv ios.zip /home/runner/work/${{ env.EXPORTER_PATH }}/builds/
+        tar -zcf iOS-${{ matrix.EXPORT_VERSION }}.zip *
+        mv iOS-${{ matrix.EXPORT_VERSION }}.zip /home/runner/work/${{ env.EXPORTER_PATH }}/builds/export/
+        
         cd /home/runner/work/${{ env.EXPORTER_PATH }}/builds/android/Android/
-        tar -zcvf android.zip *
-        mv android.zip /home/runner/work/${{ env.EXPORTER_PATH }}/builds/
-        cd /home/runner/work/${{ env.EXPORTER_PATH }}/builds/
+        tar -zcf Android-${{ matrix.EXPORT_VERSION }}.zip *
+        mv Android-${{ matrix.EXPORT_VERSION }}.zip /home/runner/work/${{ env.EXPORTER_PATH }}/builds/export
+        
+        cd /home/runner/work/${{ env.EXPORTER_PATH }}/builds/export/
         ls
         pwd
     
@@ -102,7 +106,7 @@ jobs:
     # - name: Create Github Release
     #   id: create_github_release
     #   uses: actions/create-release@v1
-    #   if: matrix.EXPORT_VERSION == false
+    #   if: matrix.EXPORT_VERSION == "Debug"
     #   env:
     #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
     #   with:
@@ -117,7 +121,7 @@ jobs:
     # - name: Upload Release
     #   id: upload_github_release
     #   uses: actions/upload-release-asset@v1
-    #   if: matrix.EXPORT_VERSION == false
+    #   if: matrix.EXPORT_VERSION == "Debug"
     #   env:
     #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     #   with:
