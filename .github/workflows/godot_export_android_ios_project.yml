@@ -100,20 +100,19 @@ jobs:
         ls
         pwd
     
-    # - name: Create Github Release
-    #   id: create_github_release
-    #   uses: actions/create-release@v1
-    #   if: matrix.EXPORT_VERSION == 'Debug'
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
-    #   with:
-    #     tag_name: ${{ steps.tag_version.outputs.TAG_VERSION }}
-    #     release_name: Release ${{ steps.tag_version.outputs.TAG_VERSION }}
-    #     body: |
-    #       Godot Export Android & iOS Project
-    #       - Automated Build
-    #     draft: false
-    #     prerelease: false  
+    - name: Create Github Release
+      id: create_github_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+      with:
+        tag_name: ${{ steps.tag_version.outputs.TAG_VERSION }}
+        release_name: ${{ steps.tag_version.outputs.TAG_VERSION }} - ${{ matrix.EXPORT_VERSION }}
+        body: |
+          Godot Export Android & iOS Project
+          - Automated Build
+        draft: false
+        prerelease: false  
 
     # - name: Upload Release
     #   id: upload_github_release
