@@ -56,7 +56,8 @@ jobs:
     - name: Get Github Version Tag
       id: tag_version
       run: |
-        echo ::set-output name=TAG_VERSION::${GITHUB_REF#refs/tags/v}  
+        echo ::set-output name=TAG_VERSION::${GITHUB_REF#refs/tags/v}
+        cd /home/runner/work/${{ env.EXPORTER_PATH }}/builds/ios/iOS/ 
         ls
 
     # - name: iOS Release Build
