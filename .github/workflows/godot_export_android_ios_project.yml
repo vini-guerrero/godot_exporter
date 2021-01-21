@@ -53,11 +53,11 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Get Github Version Tag
-        id: tag_version
-        run: |
-          echo ::set-output name=TAG_VERSION::${GITHUB_REF#refs/tags/v}  
-          ls
+    - name: Get Github Version Tag
+      id: tag_version
+      run: |
+        echo ::set-output name=TAG_VERSION::${GITHUB_REF#refs/tags/v}  
+        ls
 
     # - name: iOS Release Build
     #   uses: actions/upload-artifact@v2
