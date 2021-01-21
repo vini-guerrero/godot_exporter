@@ -11,7 +11,7 @@ on:
     #   - './../*'
     branches: [ master ]
     tags:
-      - 'v*' 
+      - 'v*.*.*'
 env:
   GITHUB_RELEASE: false
   EXPORTER_PATH: godot_exporter
@@ -56,7 +56,7 @@ jobs:
     - name: Get Github Version Tag
       id: tag_version
       run: |
-        echo ::set-output name=TAG_VERSION::${date}
+        echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
     # Generates iOS Debug Build
     - name: iOS Debug Build
       uses: actions/upload-artifact@v2
@@ -106,8 +106,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
       with:
-        tag_name: ${{ steps.tag_version.outputs.TAG_VERSION }}
-        release_name: ${{ steps.tag_version.outputs.TAG_VERSION }}
+        tag_name: ${{ env.RELEASE_VERSION }}
+        release_name: ${{ env.RELEASE_VERSION }}
         body: |
           Godot Export Android & iOS Project
           - Automated Build
