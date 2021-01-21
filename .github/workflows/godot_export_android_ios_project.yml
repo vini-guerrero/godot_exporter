@@ -39,12 +39,7 @@ jobs:
       
       run: |
         sudo chmod 777 -R /usr/bin        
-        mv /usr/local/lib/android/sdk/platform-tools/adb /usr/bin
-    
-    - name: Get Github Version Tag
-      id: tag_version
-      run: |
-        echo ::set-output name=TAG_VERSION::${GITHUB_REF#refs/tags/v}   
+        mv /usr/local/lib/android/sdk/platform-tools/adb /usr/bin 
           
     - name: Setup Godot Environment and Project
       uses: vini-guerrero/godot-export@master
@@ -58,57 +53,63 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: iOS Release Build
-      uses: actions/upload-artifact@v2
-      if: matrix.EXPORT_VERSION == true
-      with:
-        name: iOS-Release
-        path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/ios/iOS/
+      - name: Get Github Version Tag
+      id: tag_version
+      run: |
+        echo ::set-output name=TAG_VERSION::${GITHUB_REF#refs/tags/v}  
+        ls
 
-    - name: Android Release Build
-      uses: actions/upload-artifact@v2
-      if: matrix.EXPORT_VERSION == true
-      with:
-        name: Android-Release
-        path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/android/Android/
+    # - name: iOS Release Build
+    #   uses: actions/upload-artifact@v2
+    #   if: matrix.EXPORT_VERSION == true
+    #   with:
+    #     name: iOS-Release
+    #     path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/ios/iOS/
+
+    # - name: Android Release Build
+    #   uses: actions/upload-artifact@v2
+    #   if: matrix.EXPORT_VERSION == true
+    #   with:
+    #     name: Android-Release
+    #     path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/android/Android/
     
-    - name: iOS Debug Build
-      uses: actions/upload-artifact@v2
-      if: matrix.EXPORT_VERSION == false
-      with:
-        name: iOS-Debug
-        path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/ios/iOS/
+    # - name: iOS Debug Build
+    #   uses: actions/upload-artifact@v2
+    #   if: matrix.EXPORT_VERSION == false
+    #   with:
+    #     name: iOS-Debug
+    #     path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/ios/iOS/
 
-    - name: Android Debug Build
-      uses: actions/upload-artifact@v2
-      if: matrix.EXPORT_VERSION == false
-      with:
-        name: Android-Debug
-        path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/android/Android/
+    # - name: Android Debug Build
+    #   uses: actions/upload-artifact@v2
+    #   if: matrix.EXPORT_VERSION == false
+    #   with:
+    #     name: Android-Debug
+    #     path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/android/Android/
     
-    - name: Create Github Release
-      id: create_github_release
-      uses: actions/create-release@v1
-      if: matrix.EXPORT_VERSION == false
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
-      with:
-        tag_name: ${{ steps.tag_version.outputs.TAG_VERSION }}
-        release_name: Release ${{ steps.tag_version.outputs.TAG_VERSION }}
-        body: |
-          Godot Export Android & iOS Project
-          - Automated Build
-        draft: false
-        prerelease: false  
+    # - name: Create Github Release
+    #   id: create_github_release
+    #   uses: actions/create-release@v1
+    #   if: matrix.EXPORT_VERSION == false
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+    #   with:
+    #     tag_name: ${{ steps.tag_version.outputs.TAG_VERSION }}
+    #     release_name: Release ${{ steps.tag_version.outputs.TAG_VERSION }}
+    #     body: |
+    #       Godot Export Android & iOS Project
+    #       - Automated Build
+    #     draft: false
+    #     prerelease: false  
 
-    - name: Upload Release
-      id: upload_github_release
-      uses: actions/upload-release-asset@v1
-      if: matrix.EXPORT_VERSION == false
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_github_release.outputs.upload_url }}
-        asset_path: ./home/runner/work/${{ env.EXPORTER_PATH }}/builds/android/Android/Android-Debug
-        asset_name: Android-Debug.zip
-        asset_content_type: application/zip
+    # - name: Upload Release
+    #   id: upload_github_release
+    #   uses: actions/upload-release-asset@v1
+    #   if: matrix.EXPORT_VERSION == false
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #   with:
+    #     upload_url: ${{ steps.create_github_release.outputs.upload_url }}
+    #     asset_path: ./home/runner/work/${{ env.EXPORTER_PATH }}/builds/android/Android/Android-Debug
+    #     asset_name: Android-Debug.zip
+    #     asset_content_type: application/zip
