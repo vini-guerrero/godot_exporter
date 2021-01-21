@@ -26,8 +26,9 @@ jobs:
         GODOT_VERSIONS: [3.2.3]
         EXPORT_VERSION: ["Release", "Debug"]
     steps:    
+    # Checkout Latest Branch
     - uses: actions/checkout@v2
-    
+    # Setup Base Dependencies
     - name: Setup ADB & Keystore
       # run: |
       #   wget -O debug.keystore ${{ env.DEBUG_KEYSTORE_PATH }}
@@ -36,12 +37,11 @@ jobs:
       #   mv debug.keystore /usr/bin
       #   mv release.keystore /usr/bin
       #   mv /usr/local/lib/android/sdk/platform-tools/adb /usr/bin
-      
       run: |
         sudo chmod 777 -R /usr/bin        
         mv /usr/local/lib/android/sdk/platform-tools/adb /usr/bin 
-          
-    - name: Setup Godot Environment and Project
+    # Setup Godot Project & Environment
+    - name: Setup Godot Project & Environment
       uses: vini-guerrero/godot-export@master
       with:
         godot_executable_download_url: https://downloads.tuxfamily.org/godotengine/${{matrix.GODOT_VERSIONS}}/Godot_v${{matrix.GODOT_VERSIONS}}-stable_linux_headless.64.zip
@@ -52,56 +52,53 @@ jobs:
         export_debug: ${{ matrix.EXPORT_VERSION }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+    # Store Reference To Github Tag Version
     - name: Get Github Version Tag
       id: tag_version
       run: |
         echo ::set-output name=TAG_VERSION::${GITHUB_REF#refs/tags/v}
-
+    # Generates iOS Debug Build
+    - name: iOS Debug Build
+      uses: actions/upload-artifact@v2
+      if: matrix.EXPORT_VERSION == 'Debug'
+      with:
+        name: iOS-Debug
+        path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/ios/iOS/
+    # Generates iOS Release Build
     - name: iOS Release Build
       uses: actions/upload-artifact@v2
       if: matrix.EXPORT_VERSION == 'Release'
       with:
         name: iOS-Release
         path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/ios/iOS/
-
+    # Generates Android Debug Build
+    - name: Android Debug Build
+      uses: actions/upload-artifact@v2
+      if: matrix.EXPORT_VERSION == 'Debug'
+      with:
+        name: Android-Debug
+        path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/android/Android/
+    # Generates Android Release Build
     - name: Android Release Build
       uses: actions/upload-artifact@v2
       if: matrix.EXPORT_VERSION == 'Release'
       with:
         name: Android-Release
         path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/android/Android/
-
-    - name: Get Releases
-      id: get_releases
+    # Compress Generated Files To Custom Output Folder
+    - name: Get Output Files
+      id: get_output_files
       run: |
         mkdir -p /home/runner/work/${{ env.EXPORTER_PATH }}/builds/export/
-
         cd /home/runner/work/${{ env.EXPORTER_PATH }}/builds/ios/iOS/ 
         tar -zcf iOS-${{ matrix.EXPORT_VERSION }}.zip *
         mv iOS-${{ matrix.EXPORT_VERSION }}.zip /home/runner/work/${{ env.EXPORTER_PATH }}/builds/export/
-        
         cd /home/runner/work/${{ env.EXPORTER_PATH }}/builds/android/Android/
         tar -zcf Android-${{ matrix.EXPORT_VERSION }}.zip *
-        mv Android-${{ matrix.EXPORT_VERSION }}.zip /home/runner/work/${{ env.EXPORTER_PATH }}/builds/export
-        
+        mv Android-${{ matrix.EXPORT_VERSION }}.zip /home/runner/work/${{ env.EXPORTER_PATH }}/builds/export        
         cd /home/runner/work/${{ env.EXPORTER_PATH }}/builds/export/
         ls
         pwd
-    
-    # - name: iOS Debug Build
-    #   uses: actions/upload-artifact@v2
-    #   if: matrix.EXPORT_VERSION == 'Debug'
-    #   with:
-    #     name: iOS-Debug
-    #     path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/ios/iOS/
-
-    # - name: Android Debug Build
-    #   uses: actions/upload-artifact@v2
-    #   if: matrix.EXPORT_VERSION == 'Debug'
-    #   with:
-    #     name: Android-Debug
-    #     path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/android/Android/
     
     # - name: Create Github Release
     #   id: create_github_release
