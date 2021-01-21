@@ -13,7 +13,7 @@ on:
     tags:
       - 'v*' 
 env:
-  GITHUB_RELEASE: true
+  GITHUB_RELEASE: false
   EXPORTER_PATH: godot_exporter
   # DEBUG_KEYSTORE_PATH: "https://github.com/vini-guerrero/godot_exporter/blob/master/keystores/debug.keystore?raw=true"
   # RELEASE_KEYSTORE_PATH: "https://github.com/vini-guerrero/godot_exporter/blob/master/keystores/mygame.keystore?raw=true"
@@ -39,7 +39,12 @@ jobs:
       
       run: |        
         sudo chmod 777 -R /usr/bin        
-        mv /usr/local/lib/android/sdk/platform-tools/adb /usr/bin   
+        mv /usr/local/lib/android/sdk/platform-tools/adb /usr/bin
+    
+    - name: Get Github Version Tag
+      id: tag_version
+      run: |
+        echo ::set-output name=TAG_VERSION::${GITHUB_REF#refs/tags/v}   
           
     - name: Setup Godot Environment and Project
       uses: vini-guerrero/godot-export@master
@@ -87,8 +92,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
+        tag_name: ${{ steps.tag_version.outputs.TAG_VERSION}}
+        release_name: Release ${{ steps.tag_version.outputs.TAG_VERSION}}
         body: |
           Godot Export Android & iOS Project
           - Automated Build
@@ -102,6 +107,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_github_release.outputs.upload_url }}
-        asset_path: /home/runner/work/${{ env.EXPORTER_PATH }}/builds/android/Android/Android-Debug
+        asset_path: ./home/runner/work/${{ env.EXPORTER_PATH }}/builds/android/Android/
         asset_name: Android.zip
         asset_content_type: application/zip
