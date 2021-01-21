@@ -76,9 +76,11 @@ jobs:
       id: get_releases
       run: |
         cd /home/runner/work/${{ env.EXPORTER_PATH }}/builds/ios/iOS/ 
+        zip -r ios.zip *
         ls
         pwd
         cd /home/runner/work/${{ env.EXPORTER_PATH }}/builds/android/Android/
+        zip -r android.zip *
         ls
         pwd
     
